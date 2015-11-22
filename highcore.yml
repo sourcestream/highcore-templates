@@ -1,0 +1,252 @@
+---
+components:
+  - id: api
+    parameters:
+      - id: instance_type
+        description: Type of highcore instance
+        type: string
+        default: t2.micro
+        allowed_values:
+          - t1.micro
+          - t2.micro
+          - c4.large
+
+      - id: api_app_env
+        description: Application environment
+        type: string
+        required: true
+
+      - id: api_debug
+        description: Application debug mode
+        type: bool
+
+      - id: api_db_host
+        description: Database host
+        type: string
+        required: true
+
+      - id: api_db_database
+        description: Database name
+        type: string
+        required: true
+
+      - id: api_db_username
+        description: Database username
+        type: string
+        required: true
+
+      - id: api_repository
+        description: Application code or artifacts repository
+        type: string
+
+      - id: api_deploy_version
+        description: Version to deploy
+        type: string
+
+      - id: api_basic_auth
+        description: Basic auth password
+        type: string
+        sensitive: true
+
+      - id: deploy_git_update
+        description: Perform revision updates when git repository is used
+        type: string
+
+      - id: credentials_file
+        description: Name of credentials file in ansible playbook
+        type: string
+        required: true
+
+      - id: repository_host_key
+        description: Host key of code repository
+        type: string
+        default: bitbucket.org ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==
+
+      - id: playbook_version
+        description: Playbook repository version (branch, hash or a tag)
+        type: string
+        default: 'master'
+
+      - id: playbook_repository
+        description: Playbook repository
+        type: string
+        default: 'https://github.com/sourcestream/highcore-deploy.git'
+    outputs:
+      - id: api_url
+        description: Url of api
+
+    ui:
+      icon:
+        url: "images/icon-wordpress.svg"
+      container:
+        fill: "#99d9fa"
+    outputs:
+      - id: ui_url
+        description: Url of ui
+
+  - id: ui
+    parameters:
+      - id: instance_type
+        description: Type of highcore instance
+        type: string
+        default: t2.micro
+        allowed_values:
+          - t1.micro
+          - t2.micro
+          - t2.medium
+          - c4.large
+
+      - id: ui_repository
+        description: Application code or artifacts repository
+        type: string
+
+      - id: ui_deploy_version
+        description: Version to deploy
+        type: string
+
+      - id: ui_basic_auth
+        description: Basic auth password
+        type: string
+        sensitive: true
+
+      - id: deploy_git_update
+        description: Perform revision updates when git repository is used
+        type: string
+
+      - id: credentials_file
+        description: Name of credentials file in ansible playbook
+        type: string
+        required: true
+
+      - id: repository_host_key
+        description: Host key of code repository
+        type: string
+        default: bitbucket.org ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==
+
+      - id: playbook_version
+        description: Playbook repository version (branch, hash or a tag)
+        type: string
+        default: 'master'
+
+      - id: playbook_repository
+        description: Playbook repository
+        type: string
+        default: 'https://github.com/sourcestream/highcore-deploy.git'
+
+    components:
+      - id: api
+        parameters:
+          - id: id
+            description: Api component for ui
+            type: string
+            required: true
+
+    ui:
+      icon:
+        url: "images/icon-wordpress.svg"
+      container:
+        fill: "#99d9fa"
+
+parameters:
+  - id: instance_profile
+    description: Instance profile for instance-base access control
+    type: string
+    required: true
+
+  - id: vpc_id
+    description: Vpc where to deploy the stack
+    type: string
+    required: true
+
+  - id: subnet_ids
+    description: List of subnets
+    type: array
+    required: true
+
+  - id: key_name
+    description: The EC2 Key Pair to allow SSH access to the instances
+    type: string
+    aws_type: AWS::EC2::KeyPair::KeyName
+    required: true
+
+  - id: office_network_cidr
+    description: Security group with ACL for the office network
+    type: string
+    required: true
+
+  - id: private_key
+    description: Root ssh key
+    type: string
+    required: false
+    sensitive: true
+
+  - id: deploy_key
+    description: Deploy ssh key
+    type: string
+    sensitive: true
+
+  - id: api_app_key
+    description: Application encryption key
+    type: string
+    required: true
+    sensitive: true
+
+  - id: api_db_password
+    description: Application db password
+    type: string
+    required: true
+    sensitive: true
+
+  - id: templates_repository
+    description: Templates repository
+    type: string
+    default: 'https://github.com/sourcestream/highcore-templates.git'
+
+  - id: vault_password
+    description: Password for ansible vault
+    type: string
+    required: false
+    sensitive: true
+
+  - id: repository_host_key
+    description: Host key of code repository
+    type: string
+    default: bitbucket.org ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==
+
+  - id: monitoring_hostname
+    description: Monitoring server hostname
+    type: string
+
+  - id: monitoring_security_group
+    description: Security group assigned to monitoring server
+    type: string
+
+  - id: public_zone
+    description: Public dns zone
+    type: string
+    required: true
+
+  - id: private_zone_id
+    description: Private dns zone id
+    type: string
+
+  - id: private_zone_name
+    description: Private dns zone name
+    type: string
+
+  - id: authorized_users
+    description: SSH users and permissions
+    type: json
+
+  - id: stack_serial
+    description: Serial number which can be changed to enforce stack update
+    type: string
+    default: 0
+
+  - id: image_id
+    description: AMI image for instances
+    type: string
+    required: true
+
+requirements:
+  - highcore_sparkle_lib
