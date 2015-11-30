@@ -6,8 +6,8 @@ SparkleFormation::Registry.register(:"#{template}_#{:security}") do | id, compon
   @outputs[:office_network_cidr] = ref!(:"#{id}_office_network")
   @outputs[:instance_role] = ref!(:"#{id}_iam_role")
 
-  dynamic!(:iam_role, id)
-  dynamic!(:instance_profile, id,
+  registry!(:iam_role, id)
+  registry!(:instance_profile, id,
            :roles => _array(ref!(:"#{id}_iam_role"))
   )
 end

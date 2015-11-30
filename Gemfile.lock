@@ -1,0 +1,35 @@
+GIT
+  remote: git://github.com/sourcestream/highcore-sparkle-lib.git
+  revision: f95459c1188a2c7f07a7f1ae2d2655af9f942620
+  tag: 0.0.1
+  specs:
+    highcore_sparkle_lib (0.0.1)
+
+GIT
+  remote: git://github.com/sourcestream/highcore-sparkle.git
+  revision: cb0db00ba462d6563f1bc3a60043fcbc83fb73f8
+  tag: 0.0.1
+  specs:
+    highcore_sparkle (0.0.1)
+      sparkle_formation (= 0.2.12)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    attribute_struct (0.2.24)
+    multi_json (1.11.2)
+    sparkle_formation (0.2.12)
+      attribute_struct (~> 0.2.2)
+      multi_json
+    trollop (2.1.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  highcore_sparkle!
+  highcore_sparkle_lib!
+  trollop
+
+BUNDLED WITH
+   1.10.6

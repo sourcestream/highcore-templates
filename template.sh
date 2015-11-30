@@ -1,7 +1,11 @@
 #!/bin/sh
 
-bundle install --quiet
-/usr/bin/env ruby - "$@" <<RUBY
+bundle install --deployment --quiet
+ruby - "$@" <<RUBY
+
+require 'rubygems'
+require 'bundler'
+Bundler.setup(:default)
 
 require 'highcore_sparkle'
 require 'trollop'

@@ -29,7 +29,8 @@ SparkleFormation::Registry.register(:"#{template}_#{template_component}") do | i
            ref_params]},
       -> {[:files_ansible_provision, id,
            :repository => config[:playbook_repository],
-           :version => config[:playbook_version]]}
+           :version => config[:playbook_version],
+           :playbook => template]}
   ]
 
   files = files << -> {[:files_ansible_vault_password, id, :password => ref!(:vault_password)]} if config[:vault_password]
@@ -53,7 +54,7 @@ SparkleFormation::Registry.register(:"#{template}_#{template_component}") do | i
   )
 
   # DNS
-  dynamic!(:record_set, :"#{id}_public",
+  registry!(:record_set, :"#{id}_public",
            :name => join!("#{id}-", _stack_name, ".", ref!(:public_zone)),
            :target => attr!("#{id}_instance".to_sym, :public_ip),
            :hosted_zone_name => ref!(:public_zone)
