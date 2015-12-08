@@ -1,7 +1,7 @@
 GIT
   remote: git://github.com/sourcestream/highcore-sparkle-lib.git
-  revision: f95459c1188a2c7f07a7f1ae2d2655af9f942620
-  tag: 0.0.1
+  revision: 01d185bcd9ba07c2593c92150845fea0e7708f82
+  tag: 0.0.2
   specs:
     highcore_sparkle_lib (0.0.1)
 
