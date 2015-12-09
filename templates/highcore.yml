@@ -228,7 +228,6 @@ parameters:
   - id: public_zone
     description: Public dns zone
     type: string
-    required: true
 
   - id: private_zone_id
     description: Private dns zone id

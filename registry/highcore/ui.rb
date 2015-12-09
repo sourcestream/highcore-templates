@@ -3,7 +3,8 @@ template_component = :ui
 
 SparkleFormation::Registry.register(:"#{template}_#{template_component}") do | id, component = {}, config = {} |
 
-  @outputs[:"#{id}_#{template_component}_url"] = join!(["http://", ref!(:"#{id}_public_record_set")])
+  domain = config[:public_zone] ? ref!(:"#{id}_public_record_set") : attr!("#{id}_instance".to_sym, :public_dns_name)
+  @outputs[:"#{id}_#{template_component}_url"] = join!(["http://", domain])
 
   # TODO pass as a parameter
   api_component = component[:components].select{ | key, component_data |
@@ -86,7 +87,7 @@ SparkleFormation::Registry.register(:"#{template}_#{template_component}") do | i
            :name => ui_domain,
            :target => attr!("#{id}_instance".to_sym, :public_ip),
            :hosted_zone_name => ref!(:public_zone)
-  )
+  ) if config[:public_zone]
 
   registry!(:"#{template}_common")
 end
