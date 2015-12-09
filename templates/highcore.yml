@@ -14,11 +14,12 @@ components:
       - id: api_app_env
         description: Application environment
         type: string
-        required: true
+        default: local
 
       - id: api_debug
         description: Application debug mode
         type: bool
+        default: true
 
       - id: api_db_host
         description: Database host
@@ -35,13 +36,27 @@ components:
         type: string
         required: true
 
+      - id: api_db_password
+        description: Application db password
+        type: string
+        required: true
+        sensitive: true
+
+      - id: api_app_key
+        description: Application encryption key
+        type: string
+        required: true
+        sensitive: true
+
       - id: api_repository
         description: Application code or artifacts repository
         type: string
+        default: https://github.com/sourcestream/highcore-api.git
 
       - id: api_deploy_version
         description: Version to deploy
         type: string
+        default: master
 
       - id: api_basic_auth
         description: Basic auth password
@@ -51,6 +66,7 @@ components:
       - id: deploy_git_update
         description: Perform revision updates when git repository is used
         type: string
+        default: true
 
       - id: credentials_file
         description: Name of credentials file in ansible playbook
@@ -60,24 +76,24 @@ components:
       - id: repository_host_key
         description: Host key of code repository
         type: string
-        default: bitbucket.org ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==
 
       - id: playbook_version
         description: Playbook repository version (branch, hash or a tag)
         type: string
-        default: 'master'
+        default: master
 
       - id: playbook_repository
         description: Playbook repository
         type: string
-        default: 'https://github.com/sourcestream/highcore-deploy.git'
+        default: https://github.com/sourcestream/highcore-deploy.git
+
     outputs:
       - id: api_url
         description: Url of api
 
     ui:
       icon:
-        url: "images/icon-wordpress.svg"
+        url: "images/icon.svg"
       container:
         fill: "#99d9fa"
     outputs:
@@ -93,12 +109,14 @@ components:
         allowed_values:
           - t1.micro
           - t2.micro
+          - t2.small
           - t2.medium
           - c4.large
 
       - id: ui_repository
         description: Application code or artifacts repository
         type: string
+        default: https://github.com/sourcestream/highcore-ui.git
 
       - id: ui_deploy_version
         description: Version to deploy
@@ -121,17 +139,16 @@ components:
       - id: repository_host_key
         description: Host key of code repository
         type: string
-        default: bitbucket.org ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==
 
       - id: playbook_version
         description: Playbook repository version (branch, hash or a tag)
         type: string
-        default: 'master'
+        default: master
 
       - id: playbook_repository
         description: Playbook repository
         type: string
-        default: 'https://github.com/sourcestream/highcore-deploy.git'
+        default: https://github.com/sourcestream/highcore-deploy.git
 
     components:
       - id: api
@@ -143,7 +160,7 @@ components:
 
     ui:
       icon:
-        url: "images/icon-wordpress.svg"
+        url: "images/icon.svg"
       container:
         fill: "#99d9fa"
 
@@ -185,22 +202,10 @@ parameters:
     type: string
     sensitive: true
 
-  - id: api_app_key
-    description: Application encryption key
-    type: string
-    required: true
-    sensitive: true
-
-  - id: api_db_password
-    description: Application db password
-    type: string
-    required: true
-    sensitive: true
-
   - id: templates_repository
     description: Templates repository
     type: string
-    default: 'https://github.com/sourcestream/highcore-templates.git'
+    default: https://github.com/sourcestream/highcore-templates.git
 
   - id: vault_password
     description: Password for ansible vault
@@ -211,7 +216,7 @@ parameters:
   - id: repository_host_key
     description: Host key of code repository
     type: string
-    default: bitbucket.org ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==
+    default: github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
 
   - id: monitoring_hostname
     description: Monitoring server hostname
@@ -224,7 +229,6 @@ parameters:
   - id: public_zone
     description: Public dns zone
     type: string
-    required: true
 
   - id: private_zone_id
     description: Private dns zone id
