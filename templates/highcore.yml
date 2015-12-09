@@ -19,6 +19,7 @@ components:
       - id: api_debug
         description: Application debug mode
         type: bool
+        default: true
 
       - id: api_db_host
         description: Database host
@@ -34,6 +35,18 @@ components:
         description: Database username
         type: string
         required: true
+
+      - id: api_db_password
+        description: Application db password
+        type: string
+        required: true
+        sensitive: true
+
+      - id: api_app_key
+        description: Application encryption key
+        type: string
+        required: true
+        sensitive: true
 
       - id: api_repository
         description: Application code or artifacts repository
@@ -187,18 +200,6 @@ parameters:
   - id: deploy_key
     description: Deploy ssh key
     type: string
-    sensitive: true
-
-  - id: api_app_key
-    description: Application encryption key
-    type: string
-    required: true
-    sensitive: true
-
-  - id: api_db_password
-    description: Application db password
-    type: string
-    required: true
     sensitive: true
 
   - id: templates_repository
