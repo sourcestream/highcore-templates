@@ -12,9 +12,10 @@ SparkleFormation::Registry.register(:"#{template}_#{template_component}") do | i
   }.values.first
   api_id = api_component[:id]
   ui_domain = join!("#{id}-", _stack_name, ".", ref!(:public_zone))
+  api_domain = join!("#{api_id}-", _stack_name, ".", ref!(:public_zone))
 
   ref_params = {
-      :api_host => attr!("#{api_id}_instance".to_sym, :private_ip),
+      :api_host => config[:api_domain] || api_domain,
       :ui_domain => config[:ui_domain] || ui_domain
   }
 
@@ -70,6 +71,11 @@ SparkleFormation::Registry.register(:"#{template}_#{template_component}") do | i
            :port => '80',
            :cidr_ip => ref!(:office_network_cidr)
   )
+  registry!(:security_group_ingress, "#{:office_network}_443",
+           :group_id => ref!(:office_network_security_group),
+           :port => '443',
+           :cidr_ip => ref!(:office_network_cidr)
+  )
   registry!(:security_group_ingress, "#{:office_network}_3000",
            :group_id => ref!(:office_network_security_group),
            :port => '3000',
@@ -78,7 +84,7 @@ SparkleFormation::Registry.register(:"#{template}_#{template_component}") do | i
 
   registry!(:security_group_ingress, :"#{id}_#{api_id}",
            :group_id => ref!(:"#{api_id}_security_group"),
-           :port => 80,
+           :port => 443,
            :source_security_group_id => ref!(:"#{id}_security_group")
   )
 

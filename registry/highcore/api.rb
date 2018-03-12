@@ -6,7 +6,10 @@ SparkleFormation::Registry.register(:"#{template}_#{template_component}") do | i
   domain = config[:public_zone] ? ref!(:"#{id}_public_record_set") : attr!("#{id}_instance".to_sym, :public_dns_name)
   @outputs[:"#{id}_#{template_component}_url"] = join!(["http://", domain])
 
-  ref_params = {}
+  api_domain = join!("#{id}-", _stack_name, ".", ref!(:public_zone))
+  ref_params = {
+      :api_domain => config[:api_domain] || api_domain
+  }
 
   if config[:monitoring_hostname]
     ref_params[:monitoring_hostname] = ref!(:monitoring_hostname)
@@ -56,9 +59,10 @@ SparkleFormation::Registry.register(:"#{template}_#{template_component}") do | i
 
   # DNS
   registry!(:record_set, :"#{id}_public",
-           :name => join!("#{id}-", _stack_name, ".", ref!(:public_zone)),
-           :target => attr!("#{id}_instance".to_sym, :public_ip),
-           :hosted_zone_name => ref!(:public_zone)
+           :name => api_domain,
+           :target => attr!("#{id}_instance".to_sym, :public_dns_name),
+           :hosted_zone_name => ref!(:public_zone),
+           :type => 'CNAME',
   ) if config[:public_zone]
 
   registry!(:"#{template}_common")
