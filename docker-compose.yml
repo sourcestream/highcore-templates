@@ -1,0 +1,11 @@
+version: '2'
+services:
+  sparkle:
+    build: .docker
+    working_dir: /src
+    volumes:
+      - .:/src
+      - /etc/passwd:/etc/passwd:ro
+    user: $UID
+    environment:
+      SSH_AUTH_SOCK: /ssh-agent
