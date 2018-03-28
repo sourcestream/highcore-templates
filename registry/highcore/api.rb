@@ -4,7 +4,7 @@ template_component = :api
 SparkleFormation::Registry.register(:"#{template}_#{template_component}") do | id, component = {}, config = {} |
 
   domain = config[:public_zone] ? ref!(:"#{id}_public_record_set") : attr!("#{id}_instance".to_sym, :public_dns_name)
-  @outputs[:"#{id}_#{template_component}_url"] = join!(["http://", domain])
+  @outputs[:"#{id}_#{template_component}_url"] = join!(["https://", domain])
 
   api_domain = join!("#{id}-", _stack_name, ".", ref!(:public_zone))
   ref_params = {

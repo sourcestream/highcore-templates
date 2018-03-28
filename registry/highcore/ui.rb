@@ -4,7 +4,7 @@ template_component = :ui
 SparkleFormation::Registry.register(:"#{template}_#{template_component}") do | id, component = {}, config = {} |
 
   domain = config[:public_zone] ? ref!(:"#{id}_public_record_set") : attr!("#{id}_instance".to_sym, :public_dns_name)
-  @outputs[:"#{id}_#{template_component}_url"] = join!(["http://", domain])
+  @outputs[:"#{id}_#{template_component}_url"] = join!(["https://", domain])
 
   # TODO pass as a parameter
   api_component = component[:components].select{ | key, component_data |
@@ -69,7 +69,7 @@ SparkleFormation::Registry.register(:"#{template}_#{template_component}") do | i
   registry!(:security_group_ingress, "#{:office_network}_80",
            :group_id => ref!(:office_network_security_group),
            :port => '80',
-           :cidr_ip => ref!(:office_network_cidr)
+           :cidr_ip => '0.0.0.0/0'
   )
   registry!(:security_group_ingress, "#{:office_network}_443",
            :group_id => ref!(:office_network_security_group),

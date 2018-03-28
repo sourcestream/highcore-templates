@@ -8,6 +8,7 @@ components:
         default: t2.micro
         allowed_values:
           - t1.micro
+          - t2.micro
           - t2.small
           - c4.large
 
